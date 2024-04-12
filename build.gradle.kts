@@ -5,6 +5,10 @@
  * To learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.7/samples
  */
  
+ plugins {
+    kotlin("jvm") version "1.9.23"
+}
+
  dependencies {
 
     implementation("com.twelvemonkeys.imageio:imageio-jpeg:3.10.1")

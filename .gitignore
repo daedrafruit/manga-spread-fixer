@@ -29,6 +29,7 @@ settings.gradle.kts
 
 # Eclipse
 .classpath
+.project
 
 # IntelliJ IDEA
 *.iml
