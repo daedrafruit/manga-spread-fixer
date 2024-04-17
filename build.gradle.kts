@@ -4,13 +4,18 @@
  * This is a general purpose Gradle build.
  * To learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.7/samples
  */
- 
- plugins {
-    kotlin("jvm") version "1.9.23"
+
+plugins {
+    java
 }
 
- dependencies {
+repositories {
+    mavenCentral()
+}
 
+dependencies {
+    // twelvemonkeys for jpeg file support
     implementation("com.twelvemonkeys.imageio:imageio-jpeg:3.10.1")
 }
+
 
