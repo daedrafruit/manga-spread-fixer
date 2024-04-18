@@ -29,14 +29,13 @@ public class TwoPageSpreadFixer {
                //reset page count
                pageCount = 0;
                //recur scan inside
-               System.out.println("folder " + child.getName());
+               System.out.println("Folder: " + child.getName());
                scanDirectory(child);
            }
            //else the child is an image
            else {
-               //once we reach the bottom directory we can scan the images
-               System.out.println("image " + child.getName());
-
+               //increment the page count
+               pageCount += 1;
                //load image from file
                BufferedImage image = loadImage(child);
 
@@ -45,56 +44,56 @@ public class TwoPageSpreadFixer {
                    continue;
                }
 
-
-               if (imageIsOffset(image)) {
-                   //insert a
+               //if the image is offset
+               if (imageIsOffsetLandscape(image)) {
+                   System.out.println("Attempting to insert image at: " + parent.getName());
+                   //insert a filler image
                    insertFillerPage(parent);
                }
            }
       }
    }
-   public static boolean imageIsOffset(BufferedImage image) {
+   public static boolean imageIsOffsetLandscape(BufferedImage image) {
        boolean landscape = false;
        boolean onEvenPage = false;
 
        //check if image is landscape
        if (image.getWidth() > image.getHeight()) {
-           //increment page count by two (landscape means two pages)
-           pageCount += 2;
+           //increment page count again (landscape means two pages)
+           pageCount += 1;
            landscape = true;
        }
-       else {
-           pageCount += 1;
-       }
-       System.out.println(pageCount);
 
+       //check if image falls on even page
        onEvenPage = (pageCount % 2 != 0);
 
        //if the image is landscape and not on an even page, the image is offset
        return landscape && !onEvenPage;
    }
 
-   public  static void insertFillerPage(File folder) {
-       //check if a blank already exists in the file
-       System.out.println("inserting image: " + folder.getName());
-       File existingBlank = new File(folder.getName(), "!00.jpg");
-       if (existingBlank.exists()) {
-           //delete the image from the subfolder
-           existingBlank.delete();
+   public static void insertFillerPage(File folder) {
+       //TODO: optimize, dont need to keep scanning images after re-fix
+       File filler = new File(folder + "/!00.jpg");
+       if (filler.exists()){
+           filler.delete();
            System.out.println(folder + " Re-fixed (Image deleted)\n" +
                    "The Spreads are inherently offset, fixing based on final spread in chapter.\n" +
                    "Opening spreads such as cover-art may be off.");
-           //subtract from pageCount when image is deleted
+           // Subtract from pageCount when image is deleted
            pageCount -= 1;
+           return;
        }
-
-       System.out.println("Copied Blank Page");
        //if not use the default "00.jpg"
-       File originalBlank = new File("images/!00.jpg");
-       BufferedImage blankImage = loadImage(originalBlank);
-       writeImage(blankImage, folder);
+       BufferedImage newFiller = loadImage(new File("images/!00.jpg"));
 
+       // Write the blank image to the folder
+       writeImage(newFiller, new File(folder, "!00.jpg"));
+       pageCount += 1;
+       System.out.println("Copied Filler Image");
    }
+
+
+
 
    //method to load image from file
    public static BufferedImage loadImage(File file) {
