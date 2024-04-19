@@ -5,7 +5,7 @@ libs.versions.toml
 
 # test folder
 test-folder
-images
+
 
 # intellij
 .idea

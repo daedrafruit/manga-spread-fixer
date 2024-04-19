@@ -1,5 +1,3 @@
-package main.java;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -64,6 +62,8 @@ public class TwoPageSpreadFixer {
            landscape = true;
        }
 
+       //TODO: try to understand this logic, i dont think its working how i think it works
+       //       this will be checking the *second* page of a two page spread, not the first
        //check if image falls on even page
        onEvenPage = (pageCount % 2 != 0);
 
