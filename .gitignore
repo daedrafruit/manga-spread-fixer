@@ -6,9 +6,6 @@ libs.versions.toml
 # test folder
 test-folder
 
-# old ugly chatgpt gui i use for reference
-TwoPageSpreadFixerGUI.java
-
 # intellij
 .idea
 
