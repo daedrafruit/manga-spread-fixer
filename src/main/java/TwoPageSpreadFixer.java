@@ -5,13 +5,13 @@ import java.io.IOException;
 
 public class TwoPageSpreadFixer {
     static int pageCount = 0;
-    public static void main(String[] args) {
-        File folder = new File("test-folder");
-        scanDirectory(folder);
-    }
+//    public static void main(String[] args) {
+//        File folder = new File("test-folder");
+//        fixDirectorySpreads(folder);
+//    }
 
     //function to recursively look through the files until it finds the directory with images
-   public static void scanDirectory(File parent) {
+   public static void fixDirectorySpreads(File parent) {
        //put contents of file in an array
        File[] children = parent.listFiles();
 
@@ -28,7 +28,7 @@ public class TwoPageSpreadFixer {
                pageCount = 0;
                //recur scan inside
                System.out.println("Folder: " + child.getName());
-               scanDirectory(child);
+               fixDirectorySpreads(child);
            }
            //else the child is an image
            else {
