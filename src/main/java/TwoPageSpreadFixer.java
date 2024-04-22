@@ -1,7 +1,12 @@
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.FileHeader;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class TwoPageSpreadFixer {
     static int pageCount = 0;
@@ -12,6 +17,12 @@ public class TwoPageSpreadFixer {
 
     //function to recursively look through the files until it finds the directory with images
    public static void fixDirectorySpreads(File parent) {
+
+       if (new ZipFile(parent).isValidZipFile()) {
+           System.out.println("parent zip");
+           processZip(parent);
+       }
+
        //put contents of file in an array
        File[] children = parent.listFiles();
 
@@ -30,7 +41,12 @@ public class TwoPageSpreadFixer {
                System.out.println("Folder: " + child.getName());
                fixDirectorySpreads(child);
            }
-           //else the child is an image
+
+           //else the child is a zip file
+           else if (new ZipFile(child).isValidZipFile()) {
+               System.out.println("child zip");
+               processZip(child);
+           }
            else {
                //increment the page count
                pageCount += 1;
@@ -92,7 +108,37 @@ public class TwoPageSpreadFixer {
        System.out.println("Copied Filler Image");
    }
 
+    public static void processZip(File file) {
+        System.out.println("process zip");
 
+        ZipFile zipFile = new ZipFile(file.getAbsolutePath());
+        List fileHeaderList = null;
+
+        try {
+            fileHeaderList = zipFile.getFileHeaders();
+        } catch (ZipException e) {
+            System.out.println("Error reading the zip: " + file.getName());
+            return;
+        }
+
+        if (fileHeaderList == null) {
+            System.out.println("No files found in the zip: " + file.getName());
+            return;
+        }
+
+        for (Object o : fileHeaderList) {
+            FileHeader fileHeader = (FileHeader) o;
+            // FileHeader contains all the properties of the file
+            System.out.println("****File Details for: " + fileHeader.getFileName() + "*****");
+            System.out.println("Name: " + fileHeader.getFileName());
+            System.out.println("Compressed Size: " + fileHeader.getCompressedSize());
+            System.out.println("Uncompressed Size: " + fileHeader.getUncompressedSize());
+            System.out.println("************************************************************");
+
+            // Various other properties are available in FileHeader. Please have a look at FileHeader
+            // class to see all the properties
+        }
+    }
 
 
    //method to load image from file

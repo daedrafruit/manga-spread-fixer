@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -54,7 +55,7 @@ public class TwoPageSpreadFixerGUI {
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
         fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
         //add the panel to the frame
         frame.add(panel);
